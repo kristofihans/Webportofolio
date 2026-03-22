@@ -1,5 +1,6 @@
 import React from 'react';
 import Reveal from './Reveal';
+import meImg from '../assets/me.jpeg';
 import './Hero.css';
 
 const Hero = () => {
@@ -39,7 +40,7 @@ const Hero = () => {
         <Reveal delay={0.4}>
           <div className="hero-image-wrapper">
             <div className="image-decorator glass"></div>
-            <img src="/me.jpeg" alt="Hans" className="hero-image" />
+            <img src={meImg} alt="Hans" className="hero-image" />
           </div>
         </Reveal>
       </div>

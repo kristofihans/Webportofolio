@@ -42,7 +42,13 @@
 
 @media (max-width: 768px) {
   .iframe-container {
-    height: 700px;
+    height: 450px;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .iframe-container iframe {
+    width: calc(100% + 25px);
+    height: calc(100% + 25px);
   }
 }
 

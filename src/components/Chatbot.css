@@ -1,32 +1,32 @@
 /* ── Chatbot Wrapper ─────────────────────────────────────────────────────── */
 .chatbot-wrapper {
-  border-radius: 20px;
+  border-radius: 22px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 760px;
+  max-width: 900px;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-top: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
   animation: fadeIn 0.6s ease forwards;
-  /* Prevent wrapper from growing infinitely */
-  max-height: 620px;
+  height: 700px;        /* fixed height — always this tall */
+  max-height: 90vh;     /* safety cap on very short screens */
 }
 
 /* ── Header ─────────────────────────────────────────────────────────────── */
 .chatbot-header {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 1rem 1.4rem;
+  gap: 0.7rem;
+  padding: 1.1rem 1.6rem;
   background: rgba(255, 255, 255, 0.08);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   font-family: 'Outfit', sans-serif;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #fff;
   letter-spacing: 0.02em;
@@ -50,13 +50,12 @@
 
 /* ── Messages ────────────────────────────────────────────────────────────── */
 .chatbot-messages {
-  /* flex:1 + overflow lets it scroll without pushing siblings out */
   flex: 1 1 0;
-  min-height: 0;          /* allow shrinking on small screens */
-  padding: 1.2rem 1.2rem 0.6rem;
+  min-height: 0;
+  padding: 1.5rem 1.5rem 0.8rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.9rem;
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.3) rgba(255,255,255,0.05);
@@ -69,10 +68,10 @@
 .chat-bubble {
   display: flex;
   align-items: flex-start;
-  gap: 0.55rem;
-  max-width: 75%;
-  font-size: 0.93rem;
-  line-height: 1.5;
+  gap: 0.6rem;
+  max-width: 78%;
+  font-size: 0.98rem;
+  line-height: 1.55;
   animation: bubbleIn 0.3s ease forwards;
 }
 
@@ -95,8 +94,9 @@
 .chat-bubble span {
   background: rgba(255,255,255,0.12);
   border: 1px solid rgba(255,255,255,0.15);
-  padding: 0.6rem 1rem;
+  padding: 0.7rem 1.1rem;
   border-radius: 14px;
+  white-space: pre-line; /* renders \n line breaks in answers */
 }
 
 .chat-bubble.user span {
@@ -173,10 +173,10 @@
 .chatbot-input-row {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 1rem 1.2rem;
+  gap: 0.7rem;
+  padding: 1.1rem 1.5rem;
   border-top: 1px solid rgba(255,255,255,0.1);
-  flex-shrink: 0;   /* always keep input row visible */
+  flex-shrink: 0;
 }
 
 .chatbot-input {
@@ -184,10 +184,10 @@
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 10px;
-  padding: 0.7rem 1rem;
+  padding: 0.8rem 1.1rem;
   color: #fff;
   font-family: 'Inter', sans-serif;
-  font-size: 0.93rem;
+  font-size: 1rem;
   outline: none;
   transition: border-color 0.2s, background 0.2s;
 }
@@ -211,12 +211,10 @@
 @media (max-width: 768px) {
   .chatbot-wrapper {
     max-width: 100%;
-    /* Fixed height so flex children fill it properly */
-    height: 500px;
-    max-height: 500px;
+    height: 560px;
+    max-height: 560px;
   }
   .chatbot-chips {
-    /* Limit chip wrapping on small screens */
     gap: 0.35rem;
     padding: 0.5rem 0.9rem;
   }

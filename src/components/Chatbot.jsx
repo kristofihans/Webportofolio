@@ -2,177 +2,277 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, User } from 'lucide-react';
 import './Chatbot.css';
 
-// ── Knowledge base ────────────────────────────────────────────────────────────
-// Each entry has: id, keywords, pronouns (pronoun hints for context), answer, followUp (richer detail)
+// ── Knowledge base ─────────────────────────────────────────────────────────────
+// Rule: prefer MULTI-WORD, SPECIFIC keyword phrases to avoid false-positive grabs.
+// Single-word keywords are only used when truly unambiguous.
 const knowledgeBase = [
   {
+    id: 'phone',
+    keywords: [
+      'phone number', 'telephone', 'phone', 'mobile number', 'contact number',
+      'how to reach', 'how can i reach', 'how to call', 'call hans', '0775',
+    ],
+    answer: 'You can reach Hans by phone at 📞 0775 139 223.',
+    followUp: 'Feel free to call or text him directly at 0775 139 223.',
+  },
+  {
     id: 'identity',
-    keywords: ['name', 'who are you', 'who is hans', 'call you', 'your name', 'full name'],
-    pronouns: [],
-    answer: 'My full name is Zudor Kristofi Hans Cristian 👋 Nice to meet you!',
-    followUp: 'I go by Hans. I am a 25-year-old Computer Science student and web developer from Oradea, Romania.',
+    keywords: [
+      'your name', 'full name', 'who are you', 'who is hans', 'introduce yourself',
+      'what is your name', "what's your name", 'tell me about yourself',
+    ],
+    answer: 'My full name is Zudor Kristofi Hans Cristian. I am a 25-year-old Computer Science student and web developer from Oradea, Romania 👋',
+    followUp: 'I go by Hans. I study Computer Science at the University of Oradea and I have hands-on work experience in IT support and customer relations.',
   },
   {
     id: 'age',
-    keywords: ['age', 'how old', 'born', 'birthday', 'birth', '2029', 'date of birth', 'years old'],
-    pronouns: [],
-    answer: 'I am 25 years old, born on November 29, 2029 🎂',
-    followUp: 'My birthday is on November 29th. I was born in 2029, making me 25 years old right now.',
-  },
-  {
-    id: 'highschool',
-    keywords: ['highschool', 'high school', 'gymnasium', 'friedrich', 'schiller', 'secondary school'],
-    pronouns: [],
-    answer: 'I finished high school at Friedrich Schiller in Oradea 🏫',
-    followUp: 'Friedrich Schiller is a well-known high school in Oradea. I completed my studies there before moving on to university.',
-  },
-  {
-    id: 'university',
-    keywords: ['university', 'college', 'study', 'studying', 'degree', 'computer science', 'uni', 'faculty'],
-    pronouns: [],
-    answer: 'I am currently studying Computer Science at the University of Oradea 💻',
-    followUp: 'Computer Science involves algorithms, programming, databases, and much more. I love the problem-solving side of it!',
-  },
-  {
-    id: 'hobbies',
-    keywords: ['hobby', 'hobbies', 'free time', 'sport', 'interests', 'like to do', 'skateboard', 'calisthenics', 'spare time', 'passion'],
-    pronouns: [],
-    answer: 'My hobbies are skateboarding 🛹 and calisthenics 💪 I love staying active!',
-    followUp: 'Calisthenics means bodyweight training — things like pull-ups, dips and muscle-ups. Skateboarding keeps things fun and creative.',
-  },
-  {
-    id: 'father',
-    keywords: ['father', 'dad', 'papa', 'janos', 'zudor janos'],
-    pronouns: ['he writes', 'he is a', 'what does he do', 'his work', 'his job', 'he a'],
-    answer: 'My father is Zudor Janos — a Hungarian writer and poet ✍️',
-    followUp: 'My father Zudor Janos writes poetry and literature in Hungarian. He is a significant creative influence on me.',
-  },
-  {
-    id: 'mother',
-    keywords: ['mother', 'mom', 'mama', 'eniko', 'mum'],
-    pronouns: ['she paints', 'she is a', 'what does she do', 'her work', 'her job', 'she a', 'is she'],
-    answer: 'My mother is Zudor Kristofi Eniko — a talented painter 🎨',
-    followUp: 'My mother Eniko is a visual artist who paints beautifully. Art and creativity run in the family!',
-  },
-  {
-    id: 'family',
-    keywords: ['parent', 'parents', 'family', 'relatives', 'both parents'],
-    pronouns: [],
-    answer: 'My father Zudor Janos is a Hungarian writer & poet ✍️, and my mother Zudor Kristofi Eniko is a painter 🎨',
-    followUp: 'I have a very creative family! My dad writes poetry and my mom paints. And I build things digitally — we each have our medium.',
-  },
-  {
-    id: 'color',
-    keywords: ['color', 'colour', 'favourite color', 'favorite color', 'favourite colour'],
-    pronouns: [],
-    answer: 'My favourite color is blue 💙',
-    followUp: 'Blue — like deep ocean blue. It feels calm and confident at the same time.',
-  },
-  {
-    id: 'friends',
-    keywords: ['friend', 'friends', 'mate', 'mates', 'buddy', 'buddies', 'raul', 'david', 'mark', 'robert', 'samuel', 'magor', 'gergely', 'daniel', 'cousin', 'cousins', 'group'],
-    pronouns: [],
-    answer: 'My friends are Raul Bente, David Vas-Klein, Mark Madarasz, Robert Vajna, Samuel Veres, Magor Jakab, and my cousins Gergely Erdodi & Daniel Nagy-Kristofi 🤝',
-    followUp: 'We are a solid group. My cousins Gergely and Daniel feel just like friends too — we hang out a lot.',
-  },
-  {
-    id: 'girlfriend',
-    keywords: ['girlfriend', 'partner', 'relationship', 'dating', 'raluca', 'love life', 'significant other'],
-    pronouns: ['how long', 'how did', 'together', 'she like'],
-    answer: 'My girlfriend is Raluca ❤️',
-    followUp: 'Her name is Raluca. I am very happy with her 😊',
+    keywords: [
+      'how old', 'date of birth', 'birth date', 'when were you born',
+      'your birthday', 'your age', 'years old', 'when is your birthday',
+    ],
+    answer: 'Hans is 25 years old, born on November 29, 2000 in Oradea, Romania 🎂',
+    followUp: 'His birthday falls on 29 November. He has been living in Oradea since birth.',
   },
   {
     id: 'location',
-    keywords: ['city', 'live', 'from', 'home', 'location', 'where', 'oradea', 'romania', 'country'],
-    pronouns: [],
-    answer: 'I am from Oradea, Romania 📍',
-    followUp: 'Oradea is a beautiful city in north-western Romania, near the Hungarian border. It has great architecture and a vibrant culture.',
+    keywords: [
+      'where are you from', 'where do you live', 'where were you born',
+      'what city', 'which city', 'hometown', 'your city', 'your country',
+      'oradea', 'romania',
+    ],
+    answer: 'Hans is from Oradea, Romania — a beautiful city in the north-west of the country, near the Hungarian border 📍',
+    followUp: 'Oradea is known for its stunning Art Nouveau architecture and vibrant cultural scene. Hans has lived there his whole life.',
+  },
+  {
+    id: 'highschool',
+    keywords: [
+      'high school', 'highschool', 'secondary school', 'friedrich schiller',
+      'schiller', 'liceu', 'gymnasium', 'where did you go to school',
+      'which school', 'what school',
+    ],
+    answer: 'Hans completed high school at the German Theoretical Lyceum "Friedrich Schiller" in Oradea, from 2015 to 2019 🏫',
+    followUp: 'Friedrich Schiller is a prestigious German-language school in Oradea. Attending it is also the main reason Hans speaks German at an advanced C1 level.',
+  },
+  {
+    id: 'university',
+    keywords: [
+      'where do you study', 'what do you study', 'university', 'college',
+      'computer science degree', 'faculty', 'studying at', 'what are you studying',
+      'your degree', 'your major', 'uni', 'student',
+    ],
+    answer: 'Hans is currently studying Computer Science at the University of Oradea 💻',
+    followUp: 'His studies cover algorithms, programming, databases, and software engineering. He combines university with real-world professional experience in IT.',
+  },
+  {
+    id: 'experience',
+    keywords: [
+      'work experience', 'work history', 'job history', 'career', 'employment',
+      'where have you worked', 'previous jobs', 'past jobs', 'your cv',
+      'your resume', 'jobs you have had', 'professional experience', 'all jobs',
+    ],
+    answer: 'Hans has a solid work history:\n• 🖥️ IT Support Technician at Everience (Nov 2025 – Feb 2026)\n• 🎧 Customer Support Agent at Teleperformance-Majorel (Aug 2023 – Oct 2024)\n• 🎬 Video Ads Creator at Web Push SRL (Summer 2018)\n• 🎥 Video Editor at AZHOME (Summer 2017)\n• 🤖 JavaScript Internship at Cylex (Summer 2017)',
+    followUp: 'His background spans IT support, customer relations, video production, and software development — making him a versatile professional.',
+  },
+  {
+    id: 'everience',
+    keywords: [
+      'everience', 'it support', 'it technician', 'support technician',
+      'tech support job', 'it job', 'most recent job', 'last job', 'latest job',
+      'current job', '2025 job', '2026 job',
+    ],
+    answer: 'From November 2025 to February 2026, Hans worked as an IT Support Technician at Everience 🖥️ — providing technical assistance and maintaining IT systems.',
+    followUp: 'At Everience he handled hardware and software troubleshooting, user support tickets, and system maintenance on a daily basis.',
+  },
+  {
+    id: 'teleperformance',
+    keywords: [
+      'teleperformance', 'majorel', 'customer support job', 'customer service job',
+      'support agent', 'customer relations job', '2023 job', '2024 job', 'call centre',
+    ],
+    answer: 'From August 2023 to October 2024, Hans worked as a Customer Support Agent at Teleperformance-Majorel 🎧 — handling client relations and resolving customer issues.',
+    followUp: 'This role sharpened his communication skills across multiple languages and gave him experience in a fast-paced, international environment.',
+  },
+  {
+    id: 'webpush',
+    keywords: [
+      'web push', 'video ads', 'video advertising', 'mobile games job',
+      'marketing videos', '2018 job', 'summer 2018', 'advertising job',
+    ],
+    answer: 'In the summer of 2018, Hans worked at Web Push SRL creating video advertisements for mobile games 🎬',
+    followUp: 'It was his first paid job in a creative field, where he learned video production, storytelling for ads, and the mobile gaming market.',
+  },
+  {
+    id: 'azhome',
+    keywords: [
+      'azhome', 'az home', 'video editor', 'cooking show', 'video editing job',
+      '2017 video', 'summer 2017 editing',
+    ],
+    answer: 'In the summer of 2017, Hans worked as a video editor at AZHOME, editing footage for a cooking show 🎥',
+    followUp: 'The role involved cutting, colour-grading, and syncing audio for TV-style cooking segments — great experience in professional video editing.',
+  },
+  {
+    id: 'cylex',
+    keywords: [
+      'cylex', 'alexa skills', 'alexa', 'javascript internship', 'intern',
+      'internship', 'cylex internship', '2017 internship',
+    ],
+    answer: 'In 2017, Hans did an internship at Cylex where he received JavaScript training and built Amazon Alexa skills 🤖',
+    followUp: 'Building Alexa skills was his very first hands-on experience with voice interfaces and JavaScript — it sparked his passion for software development.',
+  },
+  {
+    id: 'languages',
+    keywords: [
+      'what languages', 'which languages', 'languages do you speak', 'speak',
+      'fluent in', 'german level', 'english level', 'language skills',
+      'linguistic', 'multilingual', 'bilingual', 'c1', 'b2', 'german', 'english',
+      'hungarian', 'romanian language',
+    ],
+    answer: 'Hans speaks four languages:\n• 🇷🇴 Romanian — native\n• 🇭🇺 Hungarian — native\n• 🇩🇪 German — advanced (C1)\n• 🇬🇧 English — advanced (B2)',
+    followUp: 'Growing up in Oradea — a multicultural city with strong Hungarian and German roots — made multilingualism a natural part of his life.',
+  },
+  {
+    id: 'hobbies',
+    keywords: [
+      'hobbies', 'hobby', 'what do you do for fun', 'free time', 'spare time',
+      'interests', 'outside work', 'what are your hobbies', 'what do you enjoy',
+      'skateboarding', 'skateboard', 'calisthenics', 'sport',
+    ],
+    answer: 'Hans\'s hobbies are skateboarding 🛹 and calisthenics 💪 — he loves staying active and challenging himself physically.',
+    followUp: 'Calisthenics covers bodyweight exercises like pull-ups, dips, and muscle-ups. Combined with skateboarding, it keeps him both fit and creative in his free time.',
+  },
+  {
+    id: 'father',
+    keywords: [
+      'your father', 'your dad', 'who is your father', 'who is your dad',
+      'what does your father do', 'his father', 'zudor janos', 'dad do',
+    ],
+    pronouns: ['he writes', 'he is a writer', 'what does he do', 'his work', 'is he a poet'],
+    answer: 'Hans\'s father is Zudor Janos — a Hungarian writer and poet ✍️ He has a deep passion for literature and the Hungarian language.',
+    followUp: 'Zudor Janos writes poetry and prose in Hungarian. His creative work has been a major cultural influence on Hans.',
+  },
+  {
+    id: 'mother',
+    keywords: [
+      'your mother', 'your mom', 'who is your mother', 'who is your mom',
+      'what does your mother do', 'his mother', 'zudor eniko', 'eniko', 'mom do',
+    ],
+    pronouns: ['she paints', 'she is a painter', 'what does she do', 'her work', 'is she an artist'],
+    answer: 'Hans\'s mother is Zudor Kristofi Eniko — a talented painter 🎨 She expresses herself through visual art.',
+    followUp: 'Eniko\'s paintings reflect deep emotion and colour. Growing up around her art gave Hans a strong appreciation for creativity and aesthetics.',
+  },
+  {
+    id: 'family',
+    keywords: [
+      'your family', 'your parents', 'tell me about your family', "hans's family",
+      'both parents', 'mom and dad', 'mother and father',
+    ],
+    answer: 'Hans comes from a creative family: his father Zudor Janos is a Hungarian writer & poet ✍️, and his mother Zudor Kristofi Eniko is a painter 🎨',
+    followUp: 'With a poet for a father and a painter for a mother, creativity runs deep in the family. Hans channels that into web development and technology.',
+  },
+  {
+    id: 'color',
+    keywords: [
+      'favourite color', 'favorite color', 'favourite colour', 'favorite colour',
+      'what color', 'what colour', 'fav color', 'color is',
+    ],
+    answer: 'Hans\'s favourite color is blue 💙 — calm, confident, and deep, just like the ocean.',
+    followUp: 'He tends to favour blue tones in his design work too — it conveys trust and clarity.',
+  },
+  {
+    id: 'friends',
+    keywords: [
+      'your friends', 'his friends', "hans's friends", 'who are your friends',
+      'best friends', 'friend group', 'raul bente', 'david vas', 'mark madarasz',
+      'robert vajna', 'samuel veres', 'magor jakab', 'gergely erdodi', 'daniel nagy',
+      'cousins',
+    ],
+    answer: 'Hans\'s close friends are Raul Bente, David Vas-Klein, Mark Madarasz, Robert Vajna, Samuel Veres, and Magor Jakab. His cousins Gergely Erdodi and Daniel Nagy-Kristofi are also part of the crew 🤝',
+    followUp: 'They are a tight-knit, long-standing group. His cousins Gergely and Daniel feel just like close friends too.',
+  },
+  {
+    id: 'girlfriend',
+    keywords: [
+      'your girlfriend', 'his girlfriend', "hans's girlfriend", 'who is your girlfriend',
+      'are you in a relationship', 'do you have a girlfriend', 'raluca',
+      'your partner', 'love life',
+    ],
+    pronouns: ['is she nice', 'how long', 'how did they meet'],
+    answer: 'Hans\'s girlfriend is Raluca ❤️ He is very happy with her.',
+    followUp: 'Her name is Raluca and she is an important part of his life. Hans is quite private about his relationship, but he clearly cares a lot about her.',
   },
   {
     id: 'greeting',
-    keywords: ['hello', 'hi', 'hey', 'sup', 'good day', 'greetings', 'howdy'],
-    pronouns: [],
-    answer: "Hey there! 👋 I'm Hans's AI assistant. Ask me anything about him!",
+    keywords: [
+      'hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening',
+      'howdy', "what's up", 'sup', 'greetings',
+    ],
+    answer: 'Hey there! 👋 I\'m Hans\'s AI assistant. Ask me about his background, work, education, hobbies, languages, and more!',
     followUp: null,
   },
   {
     id: 'thanks',
-    keywords: ['thanks', 'thank you', 'thx', 'ty', 'appreciate', 'cheers'],
-    pronouns: [],
-    answer: "You're welcome! Feel free to ask me anything else 😊",
+    keywords: [
+      'thank you', 'thanks', 'cheers', 'appreciate it', 'thx', 'ty',
+      'that was helpful', 'great answer',
+    ],
+    answer: 'You\'re welcome! Feel free to ask me anything else about Hans 😊',
     followUp: null,
   },
 ];
 
-// Phrases that signal a follow-up / pronoun reference
+// Follow-up triggers
 const FOLLOWUP_TRIGGERS = [
-  'tell me more', 'more about', 'what else', 'go on', 'continue',
-  'elaborate', 'explain', 'expand', 'details', 'interesting',
-  'cool', 'nice', 'wow', 'really', 'seriously',
+  'tell me more', 'more about', 'what else', 'go on', 'elaborate',
+  'explain more', 'expand on that', 'more details', 'interesting, and',
+  'cool, and', 'continue', 'and then',
 ];
 
-const MALE_PRONOUNS   = ['he ', "he's", 'him', 'his ', 'himself'];
-const FEMALE_PRONOUNS = ['she ', "she's", 'her ', 'herself'];
+const FALLBACK = "I'm not sure about that! Try asking about Hans's work experience, education, hobbies, languages, family, or friends 🤔";
 
-const FALLBACK = "Hmm, I'm not sure about that one! Try asking about Hans's age, hobbies, family, friends, or education 🤔";
+// ── Scoring-based matcher ─────────────────────────────────────────────────────
+// Sum the LENGTH of each matching keyword. Longer matches = more specific = higher score.
+function scoreEntry(entry, lower) {
+  let score = 0;
+  for (const kw of entry.keywords) {
+    if (lower.includes(kw)) score += kw.length;
+  }
+  return score;
+}
 
-// ── Context-aware reply engine ────────────────────────────────────────────────
-function getReply(input, lastTopicId, history) {
+function getReply(input, lastTopicId) {
   const lower = input.toLowerCase().trim();
 
-  // 1. Check follow-up triggers (e.g. "tell me more", "elaborate")
-  const isFollowUp = FOLLOWUP_TRIGGERS.some((t) => lower.includes(t));
-  if (isFollowUp && lastTopicId) {
+  // 1. Follow-up → serve richer answer for the same topic
+  if (FOLLOWUP_TRIGGERS.some((t) => lower.includes(t)) && lastTopicId) {
     const last = knowledgeBase.find((e) => e.id === lastTopicId);
     if (last?.followUp) return { answer: last.followUp, topicId: lastTopicId };
   }
 
-  // 2. Check pronoun resolution against last topic
+  // 2. Pronoun resolution against last topic
+  const MALE_P   = ['he ', "he's", 'him', 'his '];
+  const FEMALE_P = ['she ', "she's", 'her '];
   if (lastTopicId) {
-    const hasMale   = MALE_PRONOUNS.some((p) => lower.includes(p));
-    const hasFemale = FEMALE_PRONOUNS.some((p) => lower.includes(p));
     const last = knowledgeBase.find((e) => e.id === lastTopicId);
-
-    if (last) {
-      // Check if any topic-specific pronoun triggers match
+    if (last?.pronouns) {
       const triggerMatch = last.pronouns.some((t) => lower.includes(t));
-      if (triggerMatch) {
-        return { answer: last.followUp || last.answer, topicId: lastTopicId };
-      }
-
-      // Generic pronoun resolution: "he" → father, "she" → mother, otherwise last topic
-      if (hasMale && lastTopicId === 'father') {
-        return { answer: last.followUp || last.answer, topicId: 'father' };
-      }
-      if (hasFemale && (lastTopicId === 'mother' || lastTopicId === 'girlfriend')) {
-        return { answer: last.followUp || last.answer, topicId: lastTopicId };
-      }
-      // Short ambiguous message → try last topic
-      if (lower.split(/\s+/).length <= 5 && (hasMale || hasFemale)) {
-        return { answer: last.followUp || last.answer, topicId: lastTopicId };
-      }
+      if (triggerMatch) return { answer: last.followUp || last.answer, topicId: lastTopicId };
     }
+    const hasMale   = MALE_P.some((p) => lower.includes(p));
+    const hasFemale = FEMALE_P.some((p) => lower.includes(p));
+    if (hasMale   && lastTopicId === 'father')     return { answer: last?.followUp || last?.answer, topicId: 'father' };
+    if (hasFemale && (lastTopicId === 'mother' || lastTopicId === 'girlfriend'))
+      return { answer: last?.followUp || last?.answer, topicId: lastTopicId };
   }
 
-  // 3. Also handle: user asks about "him" / "he" generally — try to infer father
-  if (MALE_PRONOUNS.some((p) => lower.includes(p)) && !lastTopicId) {
-    const father = knowledgeBase.find((e) => e.id === 'father');
-    return { answer: father.answer, topicId: 'father' };
-  }
-  if (FEMALE_PRONOUNS.some((p) => lower.includes(p)) && !lastTopicId) {
-    const mother = knowledgeBase.find((e) => e.id === 'mother');
-    return { answer: mother.answer, topicId: 'mother' };
-  }
-
-  // 4. Keyword match (standard)
+  // 3. Score every entry — pick the highest scoring one
+  let bestEntry = null;
+  let bestScore = 0;
   for (const entry of knowledgeBase) {
-    if (entry.keywords.some((kw) => lower.includes(kw))) {
-      return { answer: entry.answer, topicId: entry.id };
-    }
+    const s = scoreEntry(entry, lower);
+    if (s > bestScore) { bestScore = s; bestEntry = entry; }
   }
 
-  // 5. Fallback — suggest based on history to avoid repeating same suggestion
+  if (bestEntry) return { answer: bestEntry.answer, topicId: bestEntry.id };
   return { answer: FALLBACK, topicId: lastTopicId };
 }
 
@@ -180,24 +280,23 @@ function getReply(input, lastTopicId, history) {
 const CHIPS = [
   'How old are you?',
   'What are your hobbies?',
-  'Where do you study?',
+  'What work experience do you have?',
+  'What languages do you speak?',
   'Who is your girlfriend?',
-  'Tell me about your parents',
-  'Who are your friends?',
+  'Tell me about your family',
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────
 const Chatbot = () => {
   const [messages, setMessages] = useState([
-    { from: 'bot', text: "Hi! 👋 I'm Hans's AI assistant. Ask me anything about him!" },
+    { from: 'bot', text: "Hi! 👋 I'm Hans's AI assistant. Ask me about his background, work, education, hobbies, languages, and more!" },
   ]);
-  const [input, setInput]           = useState('');
-  const [isTyping, setIsTyping]     = useState(false);
-  const [lastTopic, setLastTopic]   = useState(null);
-  const messagesRef                 = useRef(null);
-  const bottomRef                   = useRef(null);
+  const [input, setInput]         = useState('');
+  const [isTyping, setIsTyping]   = useState(false);
+  const [lastTopic, setLastTopic] = useState(null);
+  const messagesRef               = useRef(null);
 
-  // Scroll only the messages container — NOT the whole page
+  // Scroll only the messages box — not the page
   useEffect(() => {
     if (messagesRef.current) {
       messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
@@ -208,16 +307,12 @@ const Chatbot = () => {
     (text) => {
       const trimmed = (text || input).trim();
       if (!trimmed || isTyping) return;
-
       setMessages((prev) => [...prev, { from: 'user', text: trimmed }]);
       setInput('');
       setIsTyping(true);
-
-      // Capture current topic for closure
       const currentTopic = lastTopic;
-
       setTimeout(() => {
-        const { answer, topicId } = getReply(trimmed, currentTopic, []);
+        const { answer, topicId } = getReply(trimmed, currentTopic);
         setIsTyping(false);
         setLastTopic(topicId);
         setMessages((prev) => [...prev, { from: 'bot', text: answer }]);
@@ -227,16 +322,13 @@ const Chatbot = () => {
   );
 
   const handleKey = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   };
 
   return (
     <div className="chatbot-wrapper glass">
       <div className="chatbot-header">
-        <Bot size={18} />
+        <Bot size={20} />
         <span>Ask me about Hans</span>
         <span className="chatbot-status-dot" title="Online" />
       </div>
@@ -244,20 +336,17 @@ const Chatbot = () => {
       <div className="chatbot-messages" ref={messagesRef}>
         {messages.map((msg, i) => (
           <div key={i} className={`chat-bubble ${msg.from}`}>
-            {msg.from === 'bot'  && <Bot  size={15} className="bubble-icon" />}
-            {msg.from === 'user' && <User size={15} className="bubble-icon" />}
+            {msg.from === 'bot'  && <Bot  size={16} className="bubble-icon" />}
+            {msg.from === 'user' && <User size={16} className="bubble-icon" />}
             <span>{msg.text}</span>
           </div>
         ))}
         {isTyping && (
           <div className="chat-bubble bot typing">
-            <Bot size={15} className="bubble-icon" />
-            <span className="typing-dots">
-              <span /><span /><span />
-            </span>
+            <Bot size={16} className="bubble-icon" />
+            <span className="typing-dots"><span /><span /><span /></span>
           </div>
         )}
-        <div ref={bottomRef} />
       </div>
 
       <div className="chatbot-chips">
@@ -277,11 +366,7 @@ const Chatbot = () => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKey}
         />
-        <button
-          className="chatbot-send btn btn-primary"
-          onClick={() => sendMessage()}
-          disabled={isTyping}
-        >
+        <button className="chatbot-send btn btn-primary" onClick={() => sendMessage()} disabled={isTyping}>
           <Send size={16} />
         </button>
       </div>

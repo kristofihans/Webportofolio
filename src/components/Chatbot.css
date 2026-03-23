@@ -50,14 +50,13 @@
 
 /* ── Messages ────────────────────────────────────────────────────────────── */
 .chatbot-messages {
-  flex: 1;
+  /* flex:1 + overflow lets it scroll without pushing siblings out */
+  flex: 1 1 0;
+  min-height: 0;          /* allow shrinking on small screens */
   padding: 1.2rem 1.2rem 0.6rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  /* Fixed height + scroll */
-  height: 340px;
-  min-height: 340px;
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.3) rgba(255,255,255,0.05);
@@ -148,6 +147,7 @@
   gap: 0.5rem;
   padding: 0.7rem 1.2rem;
   border-top: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;   /* never hide chips */
 }
 
 .chip {
@@ -176,6 +176,7 @@
   gap: 0.65rem;
   padding: 1rem 1.2rem;
   border-top: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;   /* always keep input row visible */
 }
 
 .chatbot-input {
@@ -210,10 +211,17 @@
 @media (max-width: 768px) {
   .chatbot-wrapper {
     max-width: 100%;
-    max-height: 540px;
+    /* Fixed height so flex children fill it properly */
+    height: 500px;
+    max-height: 500px;
   }
-  .chatbot-messages {
-    height: 240px;
-    min-height: 240px;
+  .chatbot-chips {
+    /* Limit chip wrapping on small screens */
+    gap: 0.35rem;
+    padding: 0.5rem 0.9rem;
+  }
+  .chip {
+    font-size: 0.72rem;
+    padding: 0.28rem 0.65rem;
   }
 }

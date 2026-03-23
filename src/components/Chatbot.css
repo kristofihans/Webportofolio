@@ -210,9 +210,10 @@
 /* ── Mobile ──────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .chatbot-wrapper {
-    max-width: 100%;
+    width: calc(100% - 2rem); /* 1rem space on left and right */
     height: 560px;
     max-height: 560px;
+    margin: 0 auto; /* backup center */
   }
   .chatbot-chips {
     gap: 0.35rem;

@@ -21,7 +21,6 @@ const InteractiveBackground = () => {
 
   return (
     <div className="interactive-bg">
-      <div className="bg-blur"></div>
       <div id="blob" ref={blobRef}></div>
     </div>
   );

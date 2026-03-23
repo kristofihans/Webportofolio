@@ -71,8 +71,8 @@
 }
 
 .whatsapp-btn {
-  background: rgba(37, 211, 102, 0.15);
-  color: #1ebd5a;
+  background: rgba(37, 211, 102, 0.25);
+  color: #ffffff;
   border: 1px solid rgba(37, 211, 102, 0.4);
   border-top: 1px solid rgba(37, 211, 102, 0.8);
   border-left: 1px solid rgba(37, 211, 102, 0.6);
@@ -86,7 +86,8 @@
 }
 
 .whatsapp-btn:hover {
-  background: rgba(37, 211, 102, 0.25);
+  background: rgba(37, 211, 102, 0.4);
+  color: #ffffff;
   transform: translateY(-3px);
 }
 

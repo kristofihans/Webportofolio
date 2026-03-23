@@ -179,28 +179,6 @@ const knowledgeBase = [
     followUp: 'He tends to favour blue tones in his design work too — it conveys trust and clarity.',
   },
   {
-    id: 'friends',
-    keywords: [
-      'your friends', 'his friends', "hans's friends", 'who are your friends',
-      'best friends', 'friend group', 'raul bente', 'david vas', 'mark madarasz',
-      'robert vajna', 'samuel veres', 'magor jakab', 'gergely erdodi', 'daniel nagy',
-      'cousins',
-    ],
-    answer: 'Hans\'s close friends are Raul Bente, David Vas-Klein, Mark Madarasz, Robert Vajna, Samuel Veres, and Magor Jakab. His cousins Gergely Erdodi and Daniel Nagy-Kristofi are also part of the crew 🤝',
-    followUp: 'They are a tight-knit, long-standing group. His cousins Gergely and Daniel feel just like close friends too.',
-  },
-  {
-    id: 'girlfriend',
-    keywords: [
-      'your girlfriend', 'his girlfriend', "hans's girlfriend", 'who is your girlfriend',
-      'are you in a relationship', 'do you have a girlfriend', 'raluca',
-      'your partner', 'love life',
-    ],
-    pronouns: ['is she nice', 'how long', 'how did they meet'],
-    answer: 'Hans\'s girlfriend is Raluca ❤️ He is very happy with her.',
-    followUp: 'Her name is Raluca and she is an important part of his life. Hans is quite private about his relationship, but he clearly cares a lot about her.',
-  },
-  {
     id: 'greeting',
     keywords: [
       'hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening',
@@ -227,7 +205,7 @@ const FOLLOWUP_TRIGGERS = [
   'cool, and', 'continue', 'and then',
 ];
 
-const FALLBACK = "I'm not sure about that! Try asking about Hans's work experience, education, hobbies, languages, family, or friends 🤔";
+const FALLBACK = "I'm not sure about that! Try asking about Hans's work experience, education, hobbies, languages, or family 🤔";
 
 // ── Scoring-based matcher ─────────────────────────────────────────────────────
 // Sum the LENGTH of each matching keyword. Longer matches = more specific = higher score.
@@ -260,7 +238,7 @@ function getReply(input, lastTopicId) {
     const hasMale   = MALE_P.some((p) => lower.includes(p));
     const hasFemale = FEMALE_P.some((p) => lower.includes(p));
     if (hasMale   && lastTopicId === 'father')     return { answer: last?.followUp || last?.answer, topicId: 'father' };
-    if (hasFemale && (lastTopicId === 'mother' || lastTopicId === 'girlfriend'))
+    if (hasFemale && lastTopicId === 'mother')
       return { answer: last?.followUp || last?.answer, topicId: lastTopicId };
   }
 
@@ -282,7 +260,6 @@ const CHIPS = [
   'What are your hobbies?',
   'What work experience do you have?',
   'What languages do you speak?',
-  'Who is your girlfriend?',
   'Tell me about your family',
 ];
 

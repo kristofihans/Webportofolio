@@ -28,6 +28,7 @@
   height: 700px;
   position: relative;
   background: #f1f5f9;
+  overflow: hidden;
 }
 
 /* Allow scrolling out of the box so users can navigate */
@@ -35,29 +36,42 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: calc(100% + 25px);
+  height: calc(100% + 25px);
   border: none;
+}
+
+.portfolio-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.portfolio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.portfolio-header h3 {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin: 0;
+  font-weight: 700;
+}
+
+.iframe-wrapper {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
   .iframe-container {
     height: 450px;
     pointer-events: none;
-    overflow: hidden;
   }
-  .iframe-container iframe {
-    width: calc(100% + 25px);
-    height: calc(100% + 25px);
-  }
-}
-
-.portfolio-info {
-  padding: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.6);
 }
 
 .portfolio-info h3 {

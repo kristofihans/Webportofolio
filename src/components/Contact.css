@@ -71,8 +71,14 @@
 }
 
 .whatsapp-btn {
-  background-color: #25D366;
-  color: #fff;
+  background: rgba(37, 211, 102, 0.15);
+  color: #1ebd5a;
+  border: 1px solid rgba(37, 211, 102, 0.4);
+  border-top: 1px solid rgba(37, 211, 102, 0.8);
+  border-left: 1px solid rgba(37, 211, 102, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
   font-size: 1.1rem;
   padding: 1rem 2rem;
   border-radius: 50px;
@@ -81,9 +87,9 @@
 }
 
 .whatsapp-btn:hover {
-  background-color: #1ebd5a;
+  background: rgba(37, 211, 102, 0.25);
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+  box-shadow: 0 12px 40px rgba(37, 211, 102, 0.15);
 }
 
 .wa-icon {

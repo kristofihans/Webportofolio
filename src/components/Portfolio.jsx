@@ -22,20 +22,22 @@ const Portfolio = () => {
         <div className="portfolio-grid">
           {projects.map((project, index) => (
             <Reveal key={index} delay={index * 0.2}>
-              <div className="portfolio-card glass">
-                <div className="iframe-container">
-                  <iframe 
-                    src={project.url} 
-                    title={project.title}
-                    loading="lazy"
-                    sandbox="allow-scripts allow-same-origin"
-                  ></iframe>
-                </div>
-                <div className="portfolio-info">
+              <div className="portfolio-item">
+                <div className="portfolio-header">
                   <h3>{project.title}</h3>
                   <a href={project.url} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-sm">
                     Visit Live <ExternalLink size={16} />
                   </a>
+                </div>
+                <div className="iframe-wrapper glass">
+                  <div className="iframe-container">
+                    <iframe 
+                      src={project.url} 
+                      title={project.title}
+                      loading="lazy"
+                      sandbox="allow-scripts allow-same-origin"
+                    ></iframe>
+                  </div>
                 </div>
               </div>
             </Reveal>

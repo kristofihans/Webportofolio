@@ -6,12 +6,14 @@ import Portfolio from './components/Portfolio';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Loader from './components/Loader';
+import InteractiveBackground from './components/InteractiveBackground';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
     <div className="app">
+      <InteractiveBackground />
       {isLoading && <Loader finishLoading={() => setIsLoading(false)} />}
       <Navbar />
       <main>

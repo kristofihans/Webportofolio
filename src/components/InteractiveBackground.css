@@ -1,0 +1,46 @@
+.interactive-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6, #93c5fd); /* Deep to light blue gradient */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#blob {
+  background-color: white;
+  height: 400px;
+  width: 400px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9); /* White-ish glow */
+  animation: blobRotate 20s infinite;
+  opacity: 0.9;
+}
+
+.bg-blur {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  backdrop-filter: blur(150px);
+  -webkit-backdrop-filter: blur(150px);
+}
+
+@keyframes blobRotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(180deg) scale(1, 1.4);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg) scale(1);
+  }
+}

@@ -39,7 +39,6 @@ const Hero = () => {
         
         <Reveal delay={0.4}>
           <div className="hero-image-wrapper">
-            <div className="image-decorator glass"></div>
             <img src={meImg} alt="Hans" className="hero-image" />
           </div>
         </Reveal>

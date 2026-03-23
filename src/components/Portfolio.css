@@ -68,6 +68,14 @@
 }
 
 @media (max-width: 768px) {
+  .portfolio-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0;
+    margin-bottom: 0.5rem;
+  }
+  
   .iframe-container {
     height: 450px;
     pointer-events: none;

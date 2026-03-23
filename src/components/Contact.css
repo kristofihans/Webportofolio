@@ -71,11 +71,11 @@
 }
 
 .whatsapp-btn {
-  background: rgba(37, 211, 102, 0.25);
+  background: rgba(37, 211, 102, 0.55);
   color: #ffffff;
-  border: 1px solid rgba(37, 211, 102, 0.4);
-  border-top: 1px solid rgba(37, 211, 102, 0.8);
-  border-left: 1px solid rgba(37, 211, 102, 0.6);
+  border: 1px solid rgba(37, 211, 102, 0.7);
+  border-top: 1px solid rgba(37, 211, 102, 0.9);
+  border-left: 1px solid rgba(37, 211, 102, 0.8);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   font-size: 1.1rem;
@@ -86,7 +86,7 @@
 }
 
 .whatsapp-btn:hover {
-  background: rgba(37, 211, 102, 0.4);
+  background: rgba(37, 211, 102, 0.75);
   color: #ffffff;
   transform: translateY(-3px);
 }

@@ -6,14 +6,18 @@ import Portfolio from './components/Portfolio';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Loader from './components/Loader';
-import InteractiveBackground from './components/InteractiveBackground';
+import videoBg from './assets/videobackground.mp4';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
     <div className="app">
-      <InteractiveBackground />
+      <video autoPlay loop muted playsInline className="video-background">
+        <source src={videoBg} type="video/mp4" />
+      </video>
+      <div className="video-overlay"></div>
+      
       {isLoading && <Loader finishLoading={() => setIsLoading(false)} />}
       <Navbar />
       <main>

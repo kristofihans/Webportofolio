@@ -179,8 +179,19 @@
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .hero-title { font-size: 3.8rem; }
   .hero-stats { flex-wrap: wrap; gap: 0.8rem; }
   .stat { flex: 1 1 calc(50% - 0.4rem); }
+
+  /* Push content below the fixed navbar (80px) with extra breathing room */
+  .hero-center-content {
+    padding-top: 100px;
+    justify-content: flex-start;
+  }
+
+  .hero-overlay {
+    justify-content: flex-start;
+    padding-top: 0;
+  }
 }

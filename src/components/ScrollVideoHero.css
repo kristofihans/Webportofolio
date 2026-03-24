@@ -1,0 +1,186 @@
+/* ── Scroll wrapper ──────────────────────────────────────────────────────── */
+.hero-scroll-wrapper {
+  position: relative;
+  height: 100vh; /* JS overrides this after frames load */
+  width: 100vw;  /* explicit vw so mobile has no horizontal gaps */
+  left: 0;
+}
+
+/* ── Sticky viewport ─────────────────────────────────────────────────────── */
+.hero-sticky-area {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh; /* use dynamic vh on mobile to exclude browser chrome */
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* ── Three.js canvas ─────────────────────────────────────────────────────── */
+.hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  z-index: 0;
+}
+
+/* ── Vignette (radial + top/bottom gradient) ─────────────────────────────── */
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.5) 100%),
+    linear-gradient(to bottom,
+      rgba(0,0,0,0.3) 0%,
+      transparent 20%,
+      transparent 65%,
+      rgba(0,0,0,0.2) 100%
+    );
+  pointer-events: none;
+}
+
+/* ── Bottom fade: blends seamlessly into the next section ───────────────── */
+.hero-bottom-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 220px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(13, 12, 26, 0.6)  40%,
+    rgba(13, 12, 26, 0.92) 70%,
+    #0d0c1a 100%
+  );
+}
+
+/* ── Overlay (content layer) ─────────────────────────────────────────────── */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.1s linear;
+  will-change: opacity;
+}
+
+/* ── Centered hero content ───────────────────────────────────────────────── */
+.hero-center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0;
+}
+
+.greeting {
+  font-size: 1.3rem;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  font-size: 6rem;
+  line-height: 1;
+  margin-bottom: 1.2rem;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  text-shadow: 0 0 80px rgba(255,255,255,0.12);
+}
+
+.hero-desc {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 2.5rem;
+  max-width: 520px;
+  line-height: 1.65;
+}
+
+/* ── Stats row ───────────────────────────────────────────────────────────── */
+.hero-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  justify-content: center;
+}
+
+.stat {
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 110px;
+}
+
+.stat h3 {
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 0.2rem;
+  font-family: 'Outfit', sans-serif;
+}
+
+.stat p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.65);
+  font-weight: 500;
+}
+
+/* ── Action buttons ──────────────────────────────────────────────────────── */
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* ── Scroll cue ──────────────────────────────────────────────────────────── */
+.hero-scroll-cue {
+  position: absolute;
+  bottom: 2.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  color: rgba(255,255,255,0.45);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  animation: fadeInUp 1.5s ease 1.2s both;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+  animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50%       { opacity: 1;   transform: scaleY(1.2); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translate(-50%, 16px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .hero-title { font-size: 3.8rem; }
+  .hero-stats { flex-wrap: wrap; gap: 0.8rem; }
+  .stat { flex: 1 1 calc(50% - 0.4rem); }
+}

@@ -27,15 +27,9 @@ const ScrollVideoHero = () => {
     const ctx     = canvas.getContext('2d');
 
     // ── Resize canvas to fill viewport ───────────────────────────────────
-    const getSize = () => ({
-      w: window.visualViewport?.width  ?? window.innerWidth,
-      h: window.visualViewport?.height ?? window.innerHeight,
-    });
-
     const resize = () => {
-      const { w, h } = getSize();
-      canvas.width  = w;
-      canvas.height = h;
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
       drawFrame(currentFrameIndex);
     };
 
@@ -87,15 +81,27 @@ const ScrollVideoHero = () => {
     // ── Scroll handler: map scroll → frame index ──────────────────────────
     let targetFrame    = 0;
     let displayedFrame = 0;
+    let animDoneFired  = false;
 
     const handleScroll = () => {
       const scrollMax = wrapper.offsetHeight - window.innerHeight;
       const progress  = Math.min(Math.max(window.scrollY / scrollMax, 0), 1);
       targetFrame = Math.round(progress * (TOTAL_FRAMES - 1));
 
-      // Fade out text overlay as user scrolls past first 40%
+      // Overlay hidden during animation, fades in starting at 50% scroll
       if (overlay) {
-        overlay.style.opacity = String(Math.max(0, 1 - progress * 2.5));
+        const textProgress = Math.max(0, (progress - 0.50) / 0.20); // 0→1 over 50%–70%
+        overlay.style.opacity = String(Math.min(1, textProgress));
+      }
+
+      // Fire a one-time event when animation finishes so Navbar can show its BG
+      if (progress >= 1 && !animDoneFired) {
+        animDoneFired = true;
+        window.dispatchEvent(new CustomEvent('heroAnimationDone'));
+      }
+      if (progress < 1 && animDoneFired) {
+        animDoneFired = false;
+        window.dispatchEvent(new CustomEvent('heroAnimationActive'));
       }
     };
 
@@ -136,8 +142,8 @@ const ScrollVideoHero = () => {
         {/* Bottom fade into next section */}
         <div className="hero-bottom-fade" />
 
-        {/* Hero text — fades on scroll */}
-        <div className="hero-overlay" ref={overlayRef}>
+        {/* Hero text — starts hidden, fades in during last 15% of animation */}
+        <div className="hero-overlay" ref={overlayRef} style={{ opacity: 0 }}>
           <div className="container hero-center-content">
             <p className="greeting">Hello, I'm</p>
             <h1 className="hero-title">Hans</h1>

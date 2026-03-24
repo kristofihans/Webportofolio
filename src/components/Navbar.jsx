@@ -7,23 +7,26 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    let scrollTimeout;
-    const handleScroll = () => {
+    // Show navbar BG only after the hero frame animation has fully played
+    const onDone   = () => setIsScrolled(true);
+    const onActive = () => setIsScrolled(false);
+
+    window.addEventListener('heroAnimationDone',   onDone);
+    window.addEventListener('heroAnimationActive', onActive);
+
+    // Fallback: if user loads page mid-scroll (e.g. refresh), check immediately
+    const hero = document.getElementById('hero');
+    if (hero) {
+      const scrollMax = hero.offsetHeight - window.innerHeight;
+      if (scrollMax > 0 && window.scrollY >= scrollMax) setIsScrolled(true);
+    } else if (window.scrollY > 50) {
       setIsScrolled(true);
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        if (window.scrollY === 0) {
-          setIsScrolled(false);
-        } else {
-          setIsScrolled(true);
-        }
-      }, 1500); // Wait after scrolling stops to hide? No, simple scroll > 0 is better.
+    }
+
+    return () => {
+      window.removeEventListener('heroAnimationDone',   onDone);
+      window.removeEventListener('heroAnimationActive', onActive);
     };
-    // Let's just do > 50px
-    const handleSimpleScroll = () => setIsScrolled(window.scrollY > 50);
-    
-    window.addEventListener('scroll', handleSimpleScroll);
-    return () => window.removeEventListener('scroll', handleSimpleScroll);
   }, []);
 
   return (

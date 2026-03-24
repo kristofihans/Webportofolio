@@ -1,9 +1,8 @@
 /* ── Scroll wrapper ──────────────────────────────────────────────────────── */
 .hero-scroll-wrapper {
   position: relative;
-  height: 100vh; /* JS overrides this after frames load */
-  width: 100vw;  /* explicit vw so mobile has no horizontal gaps */
-  left: 0;
+  height: 100vh; /* JS overrides this after video metadata loads */
+  width: 100%;
 }
 
 /* ── Sticky viewport ─────────────────────────────────────────────────────── */
@@ -11,8 +10,7 @@
   position: sticky;
   top: 0;
   height: 100vh;
-  height: 100dvh; /* use dynamic vh on mobile to exclude browser chrome */
-  width: 100vw;
+  width: 100%;
   overflow: hidden;
 }
 
@@ -84,7 +82,7 @@
 
 .greeting {
   font-size: 1.3rem;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255, 255, 255, 0.85);
   margin-bottom: 0.4rem;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -98,12 +96,12 @@
   color: #ffffff;
   font-family: 'Outfit', sans-serif;
   font-weight: 800;
-  text-shadow: 0 0 80px rgba(255,255,255,0.12);
+  text-shadow: 0 2px 24px rgba(0,0,0,0.3);
 }
 
 .hero-desc {
   font-size: 1.1rem;
-  color: rgba(255,255,255,0.75);
+  color: rgba(255, 255, 255, 0.85);
   margin-bottom: 2.5rem;
   max-width: 520px;
   line-height: 1.65;
@@ -122,18 +120,21 @@
   border-radius: 12px;
   text-align: center;
   min-width: 110px;
+  background: rgba(10, 10, 20, 0.35);
+  border: 1px solid rgba(0,0,0,0.15);
+  backdrop-filter: blur(8px);
 }
 
 .stat h3 {
   font-size: 1.8rem;
-  color: #fff;
+  color: #ffffff;
   margin-bottom: 0.2rem;
   font-family: 'Outfit', sans-serif;
 }
 
 .stat p {
   font-size: 0.85rem;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255, 255, 255, 0.75);
   font-weight: 500;
 }
 
@@ -179,19 +180,8 @@
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .hero-title { font-size: 3.8rem; }
   .hero-stats { flex-wrap: wrap; gap: 0.8rem; }
   .stat { flex: 1 1 calc(50% - 0.4rem); }
-
-  /* Push content below the fixed navbar (80px) with extra breathing room */
-  .hero-center-content {
-    padding-top: 100px;
-    justify-content: flex-start;
-  }
-
-  .hero-overlay {
-    justify-content: flex-start;
-    padding-top: 0;
-  }
 }

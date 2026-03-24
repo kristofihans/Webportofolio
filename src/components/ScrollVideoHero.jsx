@@ -19,6 +19,7 @@ const ScrollVideoHero = () => {
   const canvasRef  = useRef(null);
   const wrapperRef = useRef(null);
   const overlayRef = useRef(null);
+  const hintRef    = useRef(null);
 
   useEffect(() => {
     const canvas  = canvasRef.current;
@@ -88,13 +89,21 @@ const ScrollVideoHero = () => {
       const progress  = Math.min(Math.max(window.scrollY / scrollMax, 0), 1);
       targetFrame = Math.round(progress * (TOTAL_FRAMES - 1));
 
-      // Overlay hidden during animation, fades in starting at 50% scroll
+      // 1. Initial "Scroll" hint fades out quickly at the start
+      if (hintRef.current) {
+        hintRef.current.style.opacity = String(Math.max(0, 1 - progress * 15)); // Fades by ~6% scroll
+      }
+
+      // 2. Main Hero Overlay fades in starting at 50% scroll
       if (overlay) {
         const textProgress = Math.max(0, (progress - 0.50) / 0.20); // 0→1 over 50%–70%
         overlay.style.opacity = String(Math.min(1, textProgress));
       }
 
-      // Fire a one-time event when animation finishes so Navbar can show its BG
+      // 3. Dispatch progress for Navbar sync
+      window.dispatchEvent(new CustomEvent('heroScrollProgress', { detail: { progress } }));
+
+      // 4. Fire a one-time event when animation finishes for Navbar BG
       if (progress >= 1 && !animDoneFired) {
         animDoneFired = true;
         window.dispatchEvent(new CustomEvent('heroAnimationDone'));
@@ -141,6 +150,12 @@ const ScrollVideoHero = () => {
 
         {/* Bottom fade into next section */}
         <div className="hero-bottom-fade" />
+
+        {/* Initial "Scroll" hint — visible at the start, fades instantly */}
+        <div className="hero-initial-hint" ref={hintRef}>
+          <p>Scroll</p>
+          <div className="hint-line" />
+        </div>
 
         {/* Hero text — starts hidden, fades in during last 15% of animation */}
         <div className="hero-overlay" ref={overlayRef} style={{ opacity: 0 }}>

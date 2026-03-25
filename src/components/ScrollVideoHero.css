@@ -52,7 +52,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-bottom: 15vh; /* Pushes content down significantly */
   transition: opacity 0.1s linear;
   will-change: opacity;
 }
@@ -80,7 +81,7 @@
   font-size: 6rem;
   line-height: 1;
   margin-bottom: 1.2rem;
-  color: #0f172a;
+  color: #ffffff;
   font-family: 'Outfit', sans-serif;
   font-weight: 800;
   text-shadow: 0 2px 24px rgba(0,0,0,0.1);
@@ -105,11 +106,11 @@
 
 .stat {
   padding: 1rem 1.5rem;
-  border-radius: 12px;
+  border-radius: 8px; /* Matched button radius */
   text-align: center;
   min-width: 110px;
-  background: rgba(10, 10, 20, 0.35);
-  border: 1px solid rgba(0,0,0,0.15);
+  background: rgba(255, 255, 255, 0.05); /* Very subtle glass */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* White outline style */
   backdrop-filter: blur(8px);
 }
 
@@ -123,7 +124,7 @@
 
 .stat p {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.85);
+  color: #ffffff;
   font-weight: 500;
 }
 
@@ -132,6 +133,23 @@
   display: flex;
   gap: 1rem;
   justify-content: center;
+}
+
+/* White theme overrides for Hero buttons (on dark globe) */
+.hero-actions .btn-primary {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #ffffff;
+}
+
+.hero-actions .btn-outline {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.hero-actions .btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
 }
 
 /* ── Scroll cue ──────────────────────────────────────────────────────────── */
@@ -201,7 +219,16 @@
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
-  .hero-title { font-size: 3.8rem; }
-  .hero-stats { flex-wrap: wrap; gap: 0.8rem; }
-  .stat { flex: 1 1 calc(50% - 0.4rem); }
+  .hero-center-content {
+    justify-content: center;
+    padding-top: 2rem;
+    padding-bottom: 4rem; /* Reduced space for the cue */
+  }
+  .hero-title { font-size: 3.2rem; margin-bottom: 0.8rem; }
+  .hero-desc { font-size: 0.9rem; margin-bottom: 1rem; }
+  .hero-stats { flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.2rem; }
+  .stat { flex: 1 1 calc(50% - 0.4rem); padding: 0.6rem; min-width: 0; }
+  .stat h3 { font-size: 1.3rem; margin-bottom: 0.1rem; }
+  .hero-scroll-cue { bottom: 1rem; }
+  .scroll-line { height: 24px; }
 }

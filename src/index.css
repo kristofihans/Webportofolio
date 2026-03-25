@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap');
 
 :root {
-  --bg-primary: #0f0c1a;
-  --bg-secondary: #1a1028;
-  --text-primary: #ffffff;
-  --text-secondary: #c8d0e0;
-  --accent: #a8b8d8;
-  --accent-hover: #ffffff;
-  --glass-bg: rgba(255, 255, 255, 0.07);
-  --glass-border: rgba(255, 255, 255, 0.14);
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent: #334155;
+  --accent-hover: #000000;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -27,14 +27,13 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
-  /* Deep dark gradient — fallback / base for sections below the hero */
+  /* Light white-ish gradient for the rest of the page */
   background: linear-gradient(
     160deg,
-    #0f0c1a 0%,
-    #14102a 25%,
-    #0d1628 55%,
-    #0a111f 80%,
-    #0b0c18 100%
+    #ffffff 0%,
+    #f8fafc 35%,
+    #f1f5f9 75%,
+    #ffffff 100%
   );
   background-attachment: fixed;
 }
@@ -46,10 +45,10 @@ body::after {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.038;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.16;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 300px 300px;
+  background-size: 200px 200px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -89,7 +88,7 @@ main, footer, header {
 }
 
 .text-gradient {
-  color: #ffffff;
+  color: var(--text-primary);
   text-shadow: none;
 }
 
@@ -111,14 +110,10 @@ main, footer, header {
 }
 
 .btn-primary {
-  background: rgba(255, 255, 255, 0.12);
+  background: #0f172a;
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-top: 1px solid rgba(255, 255, 255, 0.7);
-  border-left: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid #0f172a;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary:hover {
@@ -129,13 +124,8 @@ main, footer, header {
 
 .btn-outline {
   background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-top: 1px solid rgba(255, 255, 255, 0.55);
-  border-left: 1px solid rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
 }
 
 .btn-outline:hover {
@@ -153,7 +143,7 @@ main, footer, header {
   text-align: center;
   margin-bottom: 3rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 /* ── Animations ─────────────────────────────────────────────────────────── */

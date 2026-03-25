@@ -148,9 +148,6 @@ const ScrollVideoHero = () => {
         {/* Vignette */}
         <div className="hero-vignette" />
 
-        {/* Bottom fade into next section */}
-        <div className="hero-bottom-fade" />
-
         {/* Initial "Scroll" hint — visible at the start, fades instantly */}
         <div className="hero-initial-hint" ref={hintRef}>
           <p>Scroll</p>

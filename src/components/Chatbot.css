@@ -6,12 +6,11 @@
   flex-direction: column;
   width: 100%;
   max-width: 900px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-top: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   animation: fadeIn 0.6s ease forwards;
   height: 700px;        /* fixed height — always this tall */
   max-height: 90vh;     /* safety cap on very short screens */
@@ -23,12 +22,12 @@
   align-items: center;
   gap: 0.7rem;
   padding: 1.1rem 1.6rem;
-  background: rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   font-family: 'Outfit', sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #fff;
+  color: #0f172a;
   letter-spacing: 0.02em;
   flex-shrink: 0;
 }
@@ -82,26 +81,26 @@
 
 .chat-bubble.bot {
   align-self: flex-start;
-  color: #fff;
+  color: #0f172a;
 }
 
 .chat-bubble.user {
   align-self: flex-end;
   flex-direction: row-reverse;
-  color: rgba(255,255,255,0.95);
+  color: #ffffff;
 }
 
 .chat-bubble span {
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
   padding: 0.7rem 1.1rem;
   border-radius: 14px;
   white-space: pre-line; /* renders \n line breaks in answers */
 }
 
 .chat-bubble.user span {
-  background: rgba(255,255,255,0.22);
-  border-color: rgba(255,255,255,0.3);
+  background: #0f172a;
+  border-color: #0f172a;
 }
 
 .bubble-icon {
@@ -146,7 +145,7 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.7rem 1.2rem;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
   flex-shrink: 0;   /* never hide chips */
 }
 
@@ -154,9 +153,9 @@
   font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   font-weight: 500;
-  color: rgba(255,255,255,0.85);
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.2);
+  color: #475569;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
   border-radius: 20px;
   padding: 0.35rem 0.85rem;
   cursor: pointer;
@@ -181,11 +180,11 @@
 
 .chatbot-input {
   flex: 1;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   padding: 0.8rem 1.1rem;
-  color: #fff;
+  color: #0f172a;
   font-family: 'Inter', sans-serif;
   font-size: 1rem;
   outline: none;

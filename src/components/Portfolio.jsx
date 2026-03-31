@@ -6,7 +6,7 @@ import './Portfolio.css';
 const projects = [
   { title: "FunIce Presentation", url: "https://kristofihans.github.io/FunIce/" },
   { title: "Birou de Arhitectură", url: "https://kristofihans.github.io/oanagalarhitect/#/" },
-  { title: "FotoRapid.ro", url: "https://hanskristofi.github.io/fotorapid2/" }
+  { title: "FotoRapid.ro", url: "https://orca-app-p3izu.ondigitalocean.app/" }
 ];
 
 const Portfolio = () => {

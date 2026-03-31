@@ -12,39 +12,45 @@
 /* ── Photo + intro row ───────────────────────────────────────────────────── */
 .chatbot-intro-row {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 3rem;
+  text-align: center;
+  gap: 2rem;
   margin-bottom: 3rem;
   width: 100%;
   max-width: 900px;
 }
 
 .chatbot-profile-img {
-  width: 200px;
-  height: 200px;
-  border-radius: 20px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
   object-fit: cover;
-  object-position: top;
+  object-position: center; /* Centered within the frame */
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.12);
   flex-shrink: 0;
+  transform: translateY(-2rem); /* Move it up a bit */
+  position: relative;
+  z-index: 2;
 }
 
 .chatbot-intro-text {
-  flex: 1;
+  flex: none;
 }
 
 .chatbot-section-title {
   color: #0f172a;
-  text-align: left;
+  text-align: center;
   margin-bottom: 0.8rem;
 }
 
 .chatbot-section-subtitle {
-  color: #0f172a; /* Matches the title as requested */
+  color: #0f172a;
   font-size: 1.05rem;
   line-height: 1.65;
-  max-width: 480px;
+  max-width: 550px;
+  margin: 0 auto;
 }
 
 /* ── Chatbot box centering ───────────────────────────────────────────────── */

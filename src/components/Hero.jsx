@@ -1,6 +1,6 @@
 import React from 'react';
 import Reveal from './Reveal';
-import meImg from '../assets/me.jpeg';
+import meImg from '../assets/me.jpg';
 import './Hero.css';
 
 const Hero = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import Reveal from './Reveal';
 import Chatbot from './Chatbot';
-import meImg from '../assets/me.jpeg';
+import meImg from '../assets/me.jpg';
 import './ChatbotSection.css';
 
 const ChatbotSection = () => {

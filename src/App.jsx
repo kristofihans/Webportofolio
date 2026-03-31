@@ -10,10 +10,23 @@ import Loader from './components/Loader';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [framesLoaded, setFramesLoaded] = useState(0);
+
+  // Expose progress function for ScrollVideoHero
+  window.onHeroFrameProgress = (count) => {
+    setFramesLoaded(count);
+  };
+
+  const handleFinishLoading = () => {
+    // Only allow finishing if at least 50 frames are loaded
+    if (framesLoaded >= 50) {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="app">
-      {isLoading && <Loader finishLoading={() => setIsLoading(false)} />}
+      {isLoading && <Loader finishLoading={handleFinishLoading} readyToFinish={framesLoaded >= 50} />}
       <Navbar />
       <main>
         <ScrollVideoHero />

@@ -1,19 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import './Loader.css';
 
-const Loader = ({ finishLoading }) => {
+const Loader = ({ finishLoading, readyToFinish }) => {
   const fullText = "hans.dev".split('');
   const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
-    const timer1 = setTimeout(() => setIsFading(true), 1500);
-    const timer2 = setTimeout(() => finishLoading(), 2100); 
+    // Initial intro animation lasts at least 1.5s
+    const minDurTimer = setTimeout(() => {
+      // Once intro is done AND frames are ready, start fading
+      if (readyToFinish) {
+        setIsFading(true);
+        setTimeout(() => finishLoading(), 600);
+      }
+    }, 1500);
 
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-    };
-  }, [finishLoading]);
+    return () => clearTimeout(minDurTimer);
+  }, [readyToFinish, finishLoading]);
+
+  // Keep checking if frames become ready after the 1.5s mark
+  useEffect(() => {
+    if (readyToFinish && !isFading) {
+      // Small delay for smooth transition
+      const timer = setTimeout(() => {
+        setIsFading(true);
+        setTimeout(() => finishLoading(), 600);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [readyToFinish, isFading, finishLoading]);
 
   return (
     <div className={`loader-container ${isFading ? 'fade-out' : ''}`}>

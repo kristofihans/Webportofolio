@@ -34,22 +34,33 @@ const ScrollVideoHero = () => {
       drawFrame(currentFrameIndex);
     };
 
+    // ── Setup height immediately ──────────────────────────────────────────
+    const PX_PER_FRAME = 5;
+    wrapper.style.height = `${window.innerHeight + TOTAL_FRAMES * PX_PER_FRAME}px`;
+
     // ── Preload all frames into Image objects ─────────────────────────────
-    // Images decode ahead of time so drawing is instant — no lag at all
     const images = new Array(TOTAL_FRAMES);
     let loadedCount = 0;
 
     const onAllLoaded = () => {
-      // Set wrapper height: 5px of scroll per frame
-      const PX_PER_FRAME = 5;
-      wrapper.style.height = `${window.innerHeight + TOTAL_FRAMES * PX_PER_FRAME}px`;
-      drawFrame(0);
+      // Logic for all frames loaded (if needed)
     };
 
     FRAME_URLS.forEach((url, i) => {
       const img = new Image();
       img.onload = () => {
         loadedCount++;
+        
+        // Notify parent of progress
+        if (window.onHeroFrameProgress) {
+          window.onHeroFrameProgress(loadedCount);
+        }
+
+        // Draw first frame ASAP
+        if (i === 0) {
+          drawFrame(0);
+        }
+
         if (loadedCount === TOTAL_FRAMES) onAllLoaded();
       };
       img.src = url;
@@ -60,8 +71,28 @@ const ScrollVideoHero = () => {
     let currentFrameIndex = 0;
 
     const drawFrame = (index) => {
-      const img = images[index];
-      if (!img || !img.complete || !img.naturalWidth) return;
+      let img = images[index];
+      
+      // If the target frame isn't loaded, find the closest loaded one
+      if (!img || !img.complete || !img.naturalWidth) {
+        let closest = -1;
+        for (let i = index - 1; i >= 0; i--) {
+          if (images[i] && images[i].complete && images[i].naturalWidth) {
+            closest = i;
+            break;
+          }
+        }
+        if (closest === -1) {
+          for (let i = index + 1; i < TOTAL_FRAMES; i++) {
+            if (images[i] && images[i].complete && images[i].naturalWidth) {
+              closest = i;
+              break;
+            }
+          }
+        }
+        if (closest !== -1) img = images[closest];
+        else return; // No frames loaded yet
+      }
 
       const cw = canvas.width;
       const ch = canvas.height;
